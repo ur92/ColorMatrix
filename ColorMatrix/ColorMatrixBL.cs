@@ -144,6 +144,7 @@ namespace ColorMatrix
             byte newR=0, newG=0, newB=0, colorValue;
             int expressionLoopCounter = 0;
             string result;
+            int rotateRun=rotate;
 
             //thumb preview creator
             int thumbX;
@@ -167,6 +168,7 @@ namespace ColorMatrix
                 {
                     newX = 0;
                     indexTarget = 0;
+                    rotateRun = 0;
                     //if (ImageUpdated != null)
                     //    ImageUpdated(preview.GetThumbnailImage(thumbX, thumbY, null, IntPtr.Zero), expression[charIndex], ((float)y / (float)lockSource.Height));
 
@@ -239,6 +241,24 @@ namespace ColorMatrix
 
                                 if (newX < lockTarget.Width && y < lockTarget.Height)
                                 {
+                                    if (rotate > 0)
+                                    {
+                                        result = GetBinaryStringFromColor(colorNew);
+                                        result = new string(result.Reverse().ToArray());
+                                        result = result.Substring(24 - rotateRun, rotateRun) + result.Substring(rotateRun, 24 - rotateRun);
+
+                                        if (rotateRun < 23)
+                                            rotateRun++;
+                                        else
+                                            rotateRun = 0;
+
+                                        int red = Convert.ToInt32(result.Substring(0, 8), 2);
+                                        int green = Convert.ToInt32(result.Substring(8, 8), 2);
+                                        int blue = Convert.ToInt32(result.Substring(16, 8), 2);
+
+                                        colorNew = Color.FromArgb(red, green, blue);
+                                    }
+
                                     lockTarget.SetPixel(newX, y, colorNew);
                                     //preview.SetPixel(newX, y, colorNew);
 
