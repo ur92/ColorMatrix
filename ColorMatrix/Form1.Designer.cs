@@ -53,6 +53,8 @@
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.btnFromUrl = new System.Windows.Forms.Button();
             this.txtUrl = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.numExpressionLoop = new System.Windows.Forms.NumericUpDown();
             this.groupBox5.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numRotate)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -60,6 +62,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -111,8 +114,10 @@
             // 
             // groupBox5
             // 
+            this.groupBox5.Controls.Add(this.numExpressionLoop);
             this.groupBox5.Controls.Add(this.numRotate);
             this.groupBox5.Controls.Add(this.label5);
+            this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Location = new System.Drawing.Point(12, 268);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(259, 135);
@@ -122,7 +127,7 @@
             // 
             // numRotate
             // 
-            this.numRotate.Location = new System.Drawing.Point(181, 28);
+            this.numRotate.Location = new System.Drawing.Point(159, 28);
             this.numRotate.Maximum = new decimal(new int[] {
             23,
             0,
@@ -306,6 +311,28 @@
             this.txtUrl.Size = new System.Drawing.Size(145, 20);
             this.txtUrl.TabIndex = 10;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 76);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(90, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Number of points:";
+            // 
+            // numExpressionLoop
+            // 
+            this.numExpressionLoop.Location = new System.Drawing.Point(159, 74);
+            this.numExpressionLoop.Maximum = new decimal(new int[] {
+            23,
+            0,
+            0,
+            0});
+            this.numExpressionLoop.Name = "numExpressionLoop";
+            this.numExpressionLoop.Size = new System.Drawing.Size(66, 20);
+            this.numExpressionLoop.TabIndex = 5;
+            this.numExpressionLoop.ValueChanged += new System.EventHandler(this.numCanvasWidth_ValueChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -333,6 +360,7 @@
             this.groupBox7.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -365,6 +393,8 @@
         private System.Windows.Forms.PictureBox imgSource;
         private System.Windows.Forms.NumericUpDown numRotate;
         private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.NumericUpDown numExpressionLoop;
+        private System.Windows.Forms.Label label2;
     }
 }
 

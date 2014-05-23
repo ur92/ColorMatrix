@@ -127,6 +127,9 @@ namespace ColorMatrix
             }
         }
 
+        /// <summary>
+        /// Main method for proccessing image, invoked with separate thread
+        /// </summary>
         private void CreateImage()
         {
             try

@@ -302,7 +302,8 @@ namespace ColorMatrix
                         FillColorType fillColorType,
                         BackgroundColorType backgroundColorType,
                         string imageSource,
-                        int rotate)
+                        int rotate,
+                        int expressionLoop)
         {
             try
             {
