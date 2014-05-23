@@ -59,7 +59,7 @@
             this.btnFullScr.Name = "btnFullScr";
             this.btnFullScr.Size = new System.Drawing.Size(75, 42);
             this.btnFullScr.TabIndex = 13;
-            this.btnFullScr.Text = "exit full screen";
+            this.btnFullScr.Text = "launch full screen";
             this.btnFullScr.UseVisualStyleBackColor = true;
             this.btnFullScr.Click += new System.EventHandler(this.button1_Click);
             // 

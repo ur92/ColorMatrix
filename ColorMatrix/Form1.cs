@@ -140,7 +140,8 @@ namespace ColorMatrix
                                         fillColorType,
                                         backgroundColorType,
                                         sourceFileName,
-                                        (int)numRotate.Value);
+                                        (int)numRotate.Value,
+                                        (int)numExpressionLoop.Value);
             }
             catch (InvalidDataException ex)
             {

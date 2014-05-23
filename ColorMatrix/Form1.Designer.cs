@@ -35,8 +35,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.numExpressionLoop = new System.Windows.Forms.NumericUpDown();
             this.numRotate = new System.Windows.Forms.NumericUpDown();
             this.label5 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.txtExpression = new System.Windows.Forms.TextBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.btnOpenImage = new System.Windows.Forms.Button();
@@ -53,16 +55,14 @@
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.btnFromUrl = new System.Windows.Forms.Button();
             this.txtUrl = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.numExpressionLoop = new System.Windows.Forms.NumericUpDown();
             this.groupBox5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRotate)).BeginInit();
             this.groupBox2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imgSource)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -125,6 +125,29 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Colors";
             // 
+            // numExpressionLoop
+            // 
+            this.numExpressionLoop.Location = new System.Drawing.Point(159, 74);
+            this.numExpressionLoop.Maximum = new decimal(new int[] {
+            9999,
+            0,
+            0,
+            0});
+            this.numExpressionLoop.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numExpressionLoop.Name = "numExpressionLoop";
+            this.numExpressionLoop.Size = new System.Drawing.Size(66, 20);
+            this.numExpressionLoop.TabIndex = 5;
+            this.numExpressionLoop.Value = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.numExpressionLoop.ValueChanged += new System.EventHandler(this.numCanvasWidth_ValueChanged);
+            // 
             // numRotate
             // 
             this.numRotate.Location = new System.Drawing.Point(159, 28);
@@ -146,6 +169,15 @@
             this.label5.Size = new System.Drawing.Size(71, 13);
             this.label5.TabIndex = 4;
             this.label5.Text = "Rotation fator";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 76);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(89, 13);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Insert char every:";
             // 
             // txtExpression
             // 
@@ -311,28 +343,6 @@
             this.txtUrl.Size = new System.Drawing.Size(145, 20);
             this.txtUrl.TabIndex = 10;
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 76);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(90, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Number of points:";
-            // 
-            // numExpressionLoop
-            // 
-            this.numExpressionLoop.Location = new System.Drawing.Point(159, 74);
-            this.numExpressionLoop.Maximum = new decimal(new int[] {
-            23,
-            0,
-            0,
-            0});
-            this.numExpressionLoop.Name = "numExpressionLoop";
-            this.numExpressionLoop.Size = new System.Drawing.Size(66, 20);
-            this.numExpressionLoop.TabIndex = 5;
-            this.numExpressionLoop.ValueChanged += new System.EventHandler(this.numCanvasWidth_ValueChanged);
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -350,6 +360,7 @@
             this.Text = "Color Matrix v10";
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numRotate)).EndInit();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -360,7 +371,6 @@
             this.groupBox7.PerformLayout();
             this.groupBox10.ResumeLayout(false);
             this.groupBox10.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.numExpressionLoop)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

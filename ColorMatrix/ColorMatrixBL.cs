@@ -118,21 +118,31 @@ namespace ColorMatrix
             return calculatedColor;
         }
 
+        private byte GetByteFromChar(char ch)
+        {
+            return Encoding.ASCII.GetBytes(new char[] { ch })[0];
+        }
 
         private void DrawPoints(
                         Bitmap lockSource,
                         Bitmap lockTarget,
                         string expression,
-            int rotate)
+                        int rotate,
+                        int expressionLoop)
         {
             string expressionLeft = expression;
             //copy the source image to target image
             Bitmap preview = lockSource.Clone(new Rectangle(0, 0, lockSource.Width, lockSource.Height), lockSource.PixelFormat);
 
             int charIndex = 0;
-            int pixelIndex = 0;
+            int pixelValueIndex = 0;
+            Color colorSrc;
+            Color colorNew;
+            int newX = 0;
+            int newY = 0;
             string result;
 
+            //thumb preview creator
             int thumbX;
             int thumbY;
 
@@ -147,83 +157,75 @@ namespace ColorMatrix
                 thumbX = (int)Math.Ceiling(450.0 / ((double)lockTarget.Height / (double)lockTarget.Width));
             }
 
-            Color colorSrc;
-            Color colorNew;
-            //ColorPoint newPoint = new ColorPoint();
+            //main algo
             try
             {
                 for (int y = 0; y < lockSource.Height; y++)
                 {
+                    if (ImageUpdated != null)
+                        ImageUpdated(preview.GetThumbnailImage(thumbX, thumbY, null, IntPtr.Zero), expression[charIndex], ((float)y / (float)lockSource.Height));
+
                     for (int x = 0; x < lockSource.Width; x++)
                     {
-                        if (Encoding.ASCII.GetBytes(expression[charIndex].ToString())[0] <= pixelIndex)
+                        colorSrc = lockSource.GetPixel(x, y);
+
+                        for (int v = 0; v < 3; v++)
                         {
-                            expressionLeft = expressionLeft.Remove(0, 1);
-                            if (ImageUpdated != null)
-                                ImageUpdated(preview.GetThumbnailImage(thumbX, thumbY, null, IntPtr.Zero), expression[charIndex], ((float)y / (float)lockSource.Height));
 
-                            for (int i = pixelIndex; i >= 0; i--)
+                            
+                            //if pixel values count exceeded the expression loop const=> push char value 
+                            if (++pixelValueIndex == expressionLoop)
                             {
-
-                                int xSrc = x - pixelIndex + i;
-                                int ySrc = y;
-
-                                if (xSrc < 0)
+                                byte charByte = GetByteFromChar(expression[charIndex]);
+                                switch (v)
                                 {
-                                    ySrc--;
-                                    xSrc = lockSource.Width + xSrc;
+                                    case 0:
+                                        colorSrc = Color.FromArgb(charByte, colorSrc.G, colorSrc.B);
+                                        break;
+                                    case 1:
+                                        colorSrc = Color.FromArgb(colorSrc.R, charByte, colorSrc.B);
+
+                                        break;
+                                    case 2:
+                                        colorSrc = Color.FromArgb(colorSrc.R, colorSrc.G, charByte);
+
+                                        break;
+                                    default:
+                                        break;
                                 }
 
-                                colorSrc = lockSource.GetPixel(xSrc, ySrc);
-                                colorNew = Color.FromArgb(colorSrc.B, colorSrc.R, colorSrc.G);
-                                int newX = x - i;
-                                int newY = y;
-                                if (newX < 0)
+                                if (++charIndex >= expression.Length)
                                 {
-                                    newY--;
-                                    newX = lockSource.Width + newX;
+                                    charIndex = 0;
                                 }
+                                pixelValueIndex = 0;
 
-                                result = GetBinaryStringFromColor(colorNew);
-                                //result = new string(result.Reverse().ToArray());
-                                result = result.Substring(24 - rotate, rotate) + result.Substring(rotate, 24 - rotate);
-
-                                int red = Convert.ToInt32(result.Substring(0, 8), 2);
-                                int green = Convert.ToInt32(result.Substring(8, 8), 2);
-                                int blue = Convert.ToInt32(result.Substring(16, 8), 2);
-
-                                colorNew = Color.FromArgb(red, green, blue);
-
-                                lockTarget.SetPixel(newX, newY, colorNew);
-                                preview.SetPixel(newX, newY, colorNew);
+                                //increase target coordinate
+                                if (newX + 1 >= lockSource.Width)
+                                {
+                                    newY++;
+                                    newX = 0;
+                                }
+                                else
+                                {
+                                    newX++;
+                                }
                             }
-                            pixelIndex = 0;
-                            charIndex++;
 
-                            //end of the text
-                            if (charIndex >= expression.Length)
-                            {
-                                charIndex = 0;
-                                expressionLeft = expression;
-                            }
                         }
-                        else
+
+                        if (newX < lockTarget.Width && newY < lockTarget.Height)
                         {
-                            pixelIndex++;
+                            lockTarget.SetPixel(newX, newY, colorSrc);
+                            preview.SetPixel(newX, newY, colorSrc);
                         }
-
-
                     }
-
                 }
             }
             catch (Exception ex)
             {
 
             }
-
-            //lockTarget.UnlockBits();
-            //lockSource.UnlockBits();
         }
 
         private bool ThumbnailCallback()
@@ -313,7 +315,7 @@ namespace ColorMatrix
                     Expression = expression;
 
                     //draw point on the canvas and fill the gaps between
-                    DrawPoints(sourceBmp, targetBmp, expression, rotate);
+                    DrawPoints(sourceBmp, targetBmp, expression, rotate, expressionLoop);
 
                     //save tiff image
                     SaveImage(imageFileName, targetBmp, expression);
