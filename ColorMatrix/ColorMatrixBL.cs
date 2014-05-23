@@ -132,14 +132,17 @@ namespace ColorMatrix
         {
             string expressionLeft = expression;
             //copy the source image to target image
-            Bitmap preview = lockSource.Clone(new Rectangle(0, 0, lockSource.Width, lockSource.Height), lockSource.PixelFormat);
+            //Bitmap preview = lockSource.Clone(new Rectangle(0, 0, (int)Math.Ceiling(canvasWidth * (1 + (1.0 / (float)expressionLoop))), lockSource.Height), lockSource.PixelFormat);
 
             int charIndex = 0;
-            int pixelValueIndex = 0;
+            int indexSource = 0;
+            int indexTarget = 0;
             Color colorSrc;
             Color colorNew;
             int newX = 0;
             int newY = 0;
+            byte newR=0, newG=0, newB=0, colorValue;
+            int expressionLoopCounter = 0;
             string result;
 
             //thumb preview creator
@@ -162,62 +165,90 @@ namespace ColorMatrix
             {
                 for (int y = 0; y < lockSource.Height; y++)
                 {
-                    if (ImageUpdated != null)
-                        ImageUpdated(preview.GetThumbnailImage(thumbX, thumbY, null, IntPtr.Zero), expression[charIndex], ((float)y / (float)lockSource.Height));
+                    newX = 0;
+                    indexTarget = 0;
+                    //if (ImageUpdated != null)
+                    //    ImageUpdated(preview.GetThumbnailImage(thumbX, thumbY, null, IntPtr.Zero), expression[charIndex], ((float)y / (float)lockSource.Height));
 
                     for (int x = 0; x < lockSource.Width; x++)
                     {
-                        colorSrc = lockSource.GetPixel(x, y);
+                        int innerIndex = 0;
+                        colorValue = 0;
 
-                        for (int v = 0; v < 3; v++)
+                        while (innerIndex < 3)
                         {
-
-                            
-                            //if pixel values count exceeded the expression loop const=> push char value 
-                            if (++pixelValueIndex == expressionLoop)
+                            if ((indexSource!=0) && (indexSource % expressionLoop == 0))
                             {
-                                byte charByte = GetByteFromChar(expression[charIndex]);
-                                switch (v)
+                                colorValue = GetByteFromChar(Expression[charIndex]);
+                                if (charIndex < Expression.Length-1)
+                                {
+                                    charIndex++;
+                                }
+                                else
+                                {
+                                    charIndex = 0;
+                                }
+                                indexSource = 0;
+                            }
+                            else
+                            {
+                                Color value = lockSource.GetPixel(x, y);
+                                switch (innerIndex)
                                 {
                                     case 0:
-                                        colorSrc = Color.FromArgb(charByte, colorSrc.G, colorSrc.B);
+                                        colorValue = value.R;
+                                        innerIndex++;
                                         break;
                                     case 1:
-                                        colorSrc = Color.FromArgb(colorSrc.R, charByte, colorSrc.B);
-
+                                        colorValue = value.G;
+                                        innerIndex++;
                                         break;
                                     case 2:
-                                        colorSrc = Color.FromArgb(colorSrc.R, colorSrc.G, charByte);
-
+                                        colorValue = value.B;
+                                        innerIndex++;
                                         break;
                                     default:
                                         break;
                                 }
-
-                                if (++charIndex >= expression.Length)
-                                {
-                                    charIndex = 0;
-                                }
-                                pixelValueIndex = 0;
-
-                                //increase target coordinate
-                                if (newX + 1 >= lockSource.Width)
-                                {
-                                    newY++;
-                                    newX = 0;
-                                }
-                                else
-                                {
-                                    newX++;
-                                }
+                                indexSource++;
                             }
 
-                        }
+                            switch (indexTarget)
+                            {
+                                case 0:
+                                    newR = colorValue;
+                                    indexTarget++;
 
-                        if (newX < lockTarget.Width && newY < lockTarget.Height)
-                        {
-                            lockTarget.SetPixel(newX, newY, colorSrc);
-                            preview.SetPixel(newX, newY, colorSrc);
+                                    break;
+                                case 1:
+                                    newG = colorValue;
+                                    indexTarget++;
+                                    break;
+                                case 2:
+                                    newB = colorValue;
+                                    indexTarget++;
+                                    break;
+
+                                default:
+                                    break;
+                            }
+
+                            if (indexTarget % 3 == 0)
+                            {
+                                colorNew = Color.FromArgb(newR, newG, newB);
+
+                                if (newX < lockTarget.Width && y < lockTarget.Height)
+                                {
+                                    lockTarget.SetPixel(newX, y, colorNew);
+                                    //preview.SetPixel(newX, y, colorNew);
+
+                                    if (newX < lockTarget.Width - 1)
+                                        newX++;
+                                    else
+                                        newX = 0;
+                                }
+                                indexTarget = 0;
+                            }
                         }
                     }
                 }
@@ -309,7 +340,7 @@ namespace ColorMatrix
         {
             try
             {
-                using (Bitmap targetBmp = new Bitmap(canvasWidth, canvasHeight),
+                using (Bitmap targetBmp = new Bitmap((int)Math.Ceiling(canvasWidth * (1+(1.0/(float)expressionLoop))), canvasHeight),
                               sourceBmp = new Bitmap(imageSource))
                 {
                     Expression = expression;

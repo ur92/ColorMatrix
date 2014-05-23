@@ -107,9 +107,10 @@ namespace ColorMatrix
                     //{
                     //    procWin = new ProcessWindow(colorMatrix);
                     //}
-                    colorMatrix.Expression = txtExpression.Text;
-                    procWin = new ProcessWindow(colorMatrix);
-                    procWin.Show();
+
+                    //colorMatrix.Expression = txtExpression.Text;
+                    //procWin = new ProcessWindow(colorMatrix);
+                    //procWin.Show();
 
                     Thread thread = new Thread(CreateImage);
                     thread.Start();

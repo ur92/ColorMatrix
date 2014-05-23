@@ -142,7 +142,7 @@
             this.numExpressionLoop.Size = new System.Drawing.Size(66, 20);
             this.numExpressionLoop.TabIndex = 5;
             this.numExpressionLoop.Value = new decimal(new int[] {
-            1,
+            10,
             0,
             0,
             0});
